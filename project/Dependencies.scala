@@ -11,6 +11,7 @@ object Dependencies {
   val tensorflowVersion = "1.3.0"
   val akkaVersion = "2.4.16"
   val akkaHttpVersion = "10.0.3"
+  val corenlpVersion = "3.6.0"
 
   object Compile {
     val sparkMllibLocal = "org.apache.spark" %% "spark-mllib-local" % sparkVersion excludeAll(ExclusionRule(organization = "org.scalatest"))
@@ -33,6 +34,9 @@ object Dependencies {
     val scalameter = "com.storm-enroute" %% "scalameter" % "0.8.2"
     val scopt = "com.github.scopt" %% "scopt" % "3.5.0"
     val jafama = "net.jafama" % "jafama" % "2.1.0"
+    val stanfordnlp = "edu.stanford.nlp" % "stanford-corenlp" % corenlpVersion
+    val stanfordnlpEsModel = "edu.stanford.nlp" % "stanford-corenlp" % corenlpVersion  classifier "models-spanish"
+    val stanfordnlpEnModel = "edu.stanford.nlp" % "stanford-corenlp" % corenlpVersion  classifier "models-english"
   }
 
   object Test {
@@ -42,11 +46,13 @@ object Dependencies {
 
   object Provided {
     val spark = Compile.spark.map(_.excludeAll(ExclusionRule(organization = "org.scalatest"))).map(_ % "provided")
-    val xgboostSparkDep = "ml.dmlc" % "xgboost4j-spark" % "0.7" % "provided"
+    val xgboostSparkDep = "ml.dmlc" % "xgboost4j-spark" % "0.72-SNAPSHOT" % "provided"
   }
 
   import Compile._
   val l = libraryDependencies
+
+  resolvers += Resolver.mavenLocal
 
   val tensor = l ++= Seq(sprayJson, Test.scalaTest)
 
@@ -54,7 +60,7 @@ object Dependencies {
 
   val base = l ++= Seq()
 
-  val core = l ++= Seq(sparkMllibLocal, jTransform, Test.scalaTest)
+  val core = l ++= Seq(sparkMllibLocal, jTransform, stanfordnlp, stanfordnlpEsModel, stanfordnlpEnModel, Test.scalaTest)
 
   def runtime(scalaVersion: SettingKey[String]) = l ++= (Seq(Test.scalaTest) ++ scalaReflect.modules(scalaVersion.value))
 
