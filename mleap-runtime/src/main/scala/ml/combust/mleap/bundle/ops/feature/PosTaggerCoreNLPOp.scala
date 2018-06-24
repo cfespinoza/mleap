@@ -1,8 +1,7 @@
 package ml.combust.mleap.bundle.ops.feature
 
 import ml.combust.bundle.BundleContext
-import ml.combust.bundle.dsl._
-import ml.combust.bundle.dsl.Model
+import ml.combust.bundle.dsl.{Model, _}
 import ml.combust.bundle.op.OpModel
 import ml.combust.mleap.bundle.ops.MleapOp
 import ml.combust.mleap.core.feature.PosTaggerCoreNLPModel
@@ -63,3 +62,4 @@ class PosTaggerCoreNLPOp extends MleapOp[PosTaggerCoreNLPMleapTransformer, PosTa
     */
   override def model(node: PosTaggerCoreNLPMleapTransformer): PosTaggerCoreNLPModel = node.model
 }
+

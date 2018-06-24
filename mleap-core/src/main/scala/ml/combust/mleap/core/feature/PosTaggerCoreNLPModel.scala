@@ -5,7 +5,9 @@ import java.util.Properties
 import edu.stanford.nlp.simple._
 import ml.combust.mleap.core.Model
 import ml.combust.mleap.core.types._
-import scala.collection.JavaConverters
+
+import scala.collection.JavaConversions
+
 
 
 case class PosTaggerCoreNLPModel(lang: String = "es") extends Model {
@@ -15,14 +17,15 @@ case class PosTaggerCoreNLPModel(lang: String = "es") extends Model {
   props.setProperty("ssplit.isOneSentence", "true")
   props.setProperty("tokenize.class", "PTBTokenizer")
 
-  def apply(tokenized_instance: Seq[String]): Seq[String] = {
-    val sentence: Sentence = new Sentence(tokenized_instance.mkString(" "), props)
+  def apply(sentenceStr: String): Seq[String] = {
+    val sentence: Sentence = new Sentence(sentenceStr, props)
     val tags: java.util.List[String] = sentence.posTags()
-    JavaConverters.asScalaIteratorConverter(tags.iterator()).asScala.toSeq
+    JavaConversions.asScalaBuffer(tags).toList
   }
 
-  override def inputSchema: StructType = StructType("input" -> ListType.String).get
+  override def inputSchema: StructType = StructType("input" -> ScalarType.String).get
 
   override def outputSchema: StructType = StructType("output" -> ListType.String).get
 }
+
 

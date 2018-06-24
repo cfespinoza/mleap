@@ -12,6 +12,7 @@ object SparkBundleContext {
   val DEFAULT_REGISTRY_KEY: String = "ml.combust.mleap.spark.registry.default"
 
   private val sparkVersion = org.apache.spark.SPARK_VERSION
+  /*
   private val versionedRegistryKey: String = {
     if(sparkVersion.startsWith("2.0")) {
       "ml.combust.mleap.spark.registry.v20"
@@ -23,6 +24,9 @@ object SparkBundleContext {
       throw new IllegalStateException(s"unsupported Spark version: $sparkVersion")
     }
   }
+  */
+
+  private val versionedRegistryKey: String = "ml.combust.mleap.spark.registry.v22"
 
   implicit lazy val defaultContext: SparkBundleContext = SparkBundleContext(None, Some(classOf[SparkBundleContext].getClassLoader))
 

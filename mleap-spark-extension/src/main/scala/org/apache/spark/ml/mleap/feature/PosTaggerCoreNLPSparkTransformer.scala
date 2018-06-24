@@ -1,14 +1,14 @@
 package org.apache.spark.ml.mleap.feature
 
+import ml.combust.mleap.core.feature.PosTaggerCoreNLPModel
 import org.apache.spark.annotation.DeveloperApi
 import org.apache.spark.ml.Transformer
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.param.shared.{HasInputCol, HasOutputCol}
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{DataFrame, Dataset}
-import ml.combust.mleap.core.feature.PosTaggerCoreNLPModel
 import org.apache.spark.sql.types._
+import org.apache.spark.sql.{DataFrame, Dataset}
 
 class PosTaggerCoreNLPSparkTransformer (override val uid: String, val model: PosTaggerCoreNLPModel) extends Transformer with HasInputCol with HasOutputCol {
   def this(model: PosTaggerCoreNLPModel) = this(uid = Identifiable.randomUID("postagger_corenlp"), model = model)
@@ -19,7 +19,7 @@ class PosTaggerCoreNLPSparkTransformer (override val uid: String, val model: Pos
   @org.apache.spark.annotation.Since("2.0.0")
   override def transform(dataset: Dataset[_]): DataFrame = {
     val posTaggerCoreNLPUdf = udf {
-      (label: String) => model(label)
+      (labels: Seq[String]) => model(labels)
     }
 
     dataset.withColumn($(outputCol), posTaggerCoreNLPUdf(dataset($(inputCol))))
@@ -29,12 +29,12 @@ class PosTaggerCoreNLPSparkTransformer (override val uid: String, val model: Pos
 
   @DeveloperApi
   override def transformSchema(schema: StructType): StructType = {
-    require(schema($(inputCol)).dataType.isInstanceOf[StringType],
+    require(schema($(inputCol)).dataType.isInstanceOf[ArrayType],
       s"Input column must be of type StringType but got ${schema($(inputCol)).dataType}")
     val inputFields = schema.fields
     require(!inputFields.exists(_.name == $(outputCol)),
       s"Output column ${$(outputCol)} already exists.")
-    // TODO fix return schema
-    StructType(schema.fields :+ StructField($(outputCol), DoubleType))
+    StructType(schema.fields :+ StructField($(outputCol), ArrayType(StringType)))
   }
 }
+
