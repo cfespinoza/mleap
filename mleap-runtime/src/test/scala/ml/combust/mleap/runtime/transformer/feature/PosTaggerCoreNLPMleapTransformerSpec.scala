@@ -8,7 +8,7 @@ import org.scalatest.FunSpec
 class PosTaggerCoreNLPMleapTransformerSpec extends FunSpec {
   val schema = StructType(Seq(StructField("tokenized_instance", ScalarType.String))).get
   // val dataset = LocalDataset(Seq(Row(Seq("Esto", "es", "una", "simple", "prueba")), Row(Seq("Pyxis", "gusta", "y", "funciona", "muy", "bien"))))
-  val dataset = LocalDataset(Seq(Row("Esto es una simple prueba"), Row("Pyxis gusta y funciona muy bien")))
+  val dataset = LocalDataset(Seq(Row("Estoy en la tienda de harry potter en la sección de slytherin y se acerca  una chica española y empieza a decir 'yo creo que soy slytherin, yo soy mala'. Madre mía la gente se piensa que ser slytherin es ser malo. Además si no sabes que casa eres, probablemente no seas slytherin"), Row("Pyxis gusta y funciona muy bien")))
   val frame = LeapFrame(schema, dataset)
 
   val transformer = PosTaggerCoreNLPMleapTransformer(

@@ -21,7 +21,7 @@ class PosTaggerCoreNLPModelSpec extends FunSpec  {
   describe("get tags from spanish") {
     val model = PosTaggerCoreNLPModel("es")
 
-    val tokens = "Simplemente es una prueba"
+    val tokens = "Estoy en la tienda de harry potter en la sección de slytherin y se acerca  una chica española y empieza a decir 'yo creo que soy slytherin, yo soy mala'. Madre mía la gente se piensa que ser slytherin es ser malo. Además si no sabes que casa eres, probablemente no seas slytherin"
     val tags = model.apply(tokens)
 
     System.out.println(tags)
@@ -33,7 +33,7 @@ class PosTaggerCoreNLPModelSpec extends FunSpec  {
   describe("get tags from english") {
     val model = PosTaggerCoreNLPModel("en")
 
-    val tokens = "This is a test"
+    val tokens = "From Wayne to Kane: England excel after ditching Mr Big Stuff mentality"
     val tags = model.apply(tokens)
 
     System.out.println(tags)

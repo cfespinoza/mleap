@@ -12,13 +12,14 @@ object Dependencies {
   val akkaVersion = "2.4.16"
   val akkaHttpVersion = "10.0.3"
   val corenlpVersion = "3.6.0"
+  val protobufVersion = "3.2.0"
 
   object Compile {
-    val sparkMllibLocal = "org.apache.spark" %% "spark-mllib-local" % sparkVersion excludeAll(ExclusionRule(organization = "org.scalatest"))
-    val spark = Seq("org.apache.spark" %% "spark-core" % sparkVersion,
-      "org.apache.spark" %% "spark-sql" % sparkVersion,
+    val sparkMllibLocal = "org.apache.spark" %% "spark-mllib-local" % sparkVersion excludeAll(ExclusionRule(organization = "org.scalatest")) exclude(org="com.google.protobuf", name="protobuf-java")
+    val spark = Seq("org.apache.spark" %% "spark-core" % sparkVersion exclude(org="com.google.protobuf", name="protobuf-java"),
+      "org.apache.spark" %% "spark-sql" % sparkVersion exclude(org="com.google.protobuf", name="protobuf-java"),
       "org.apache.spark" %% "spark-mllib" % sparkVersion,
-      "org.apache.spark" %% "spark-mllib-local" % sparkVersion,
+      "org.apache.spark" %% "spark-mllib-local" % sparkVersion exclude(org="com.google.protobuf", name="protobuf-java"),
       "org.apache.spark" %% "spark-catalyst" % sparkVersion)
     val avroDep = "org.apache.avro" % "avro" % "1.8.1"
     val sprayJson = "io.spray" %% "spray-json" % "1.3.2"
@@ -37,6 +38,7 @@ object Dependencies {
     val stanfordnlp = "edu.stanford.nlp" % "stanford-corenlp" % corenlpVersion
     val stanfordnlpEsModel = "edu.stanford.nlp" % "stanford-corenlp" % corenlpVersion  classifier "models-spanish"
     val stanfordnlpEnModel = "edu.stanford.nlp" % "stanford-corenlp" % corenlpVersion  classifier "models-english"
+    val googleProtobuf = "com.google.protobuf" % "protobuf-java" % protobufVersion
   }
 
   object Test {
@@ -60,7 +62,7 @@ object Dependencies {
 
   val base = l ++= Seq()
 
-  val core = l ++= Seq(sparkMllibLocal, jTransform, stanfordnlp, stanfordnlpEsModel, stanfordnlpEnModel, Test.scalaTest)
+  val core = l ++= Seq(sparkMllibLocal, jTransform, stanfordnlp, stanfordnlpEsModel, stanfordnlpEnModel, googleProtobuf, Test.scalaTest)
 
   def runtime(scalaVersion: SettingKey[String]) = l ++= (Seq(Test.scalaTest) ++ scalaReflect.modules(scalaVersion.value))
 

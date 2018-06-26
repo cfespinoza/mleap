@@ -19,7 +19,7 @@ class PosTaggerCoreNLPSparkTransformer (override val uid: String, val model: Pos
   @org.apache.spark.annotation.Since("2.0.0")
   override def transform(dataset: Dataset[_]): DataFrame = {
     val posTaggerCoreNLPUdf = udf {
-      (labels: Seq[String]) => model(labels)
+      (labels: String) => model(labels)
     }
 
     dataset.withColumn($(outputCol), posTaggerCoreNLPUdf(dataset($(inputCol))))
