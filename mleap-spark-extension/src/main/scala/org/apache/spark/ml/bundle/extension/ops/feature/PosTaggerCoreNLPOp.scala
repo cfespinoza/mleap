@@ -36,7 +36,8 @@ class PosTaggerCoreNLPOp extends OpNode[SparkBundleContext, PosTaggerCoreNLPSpar
       */
     override def store(model: Model, obj: PosTaggerCoreNLPModel)(implicit context: BundleContext[SparkBundleContext]): Model = {
       val lang = obj.lang
-      model.withValue("language", Value.string(lang))
+      val selectedTags = obj.selectedTags
+      model.withValue("language", Value.string(lang)).withValue("selectedTags", Value.string(selectedTags))
     }
 
     /** Load the model.
@@ -50,7 +51,8 @@ class PosTaggerCoreNLPOp extends OpNode[SparkBundleContext, PosTaggerCoreNLPSpar
       */
     override def load(model: Model)(implicit context: BundleContext[SparkBundleContext]): PosTaggerCoreNLPModel = {
       val lang = model.value("language")
-      PosTaggerCoreNLPModel(lang.getString)
+      val selectedTags = model.value("selectedTags")
+      PosTaggerCoreNLPModel(lang.getString, selectedTags.getString)
     }
   }
   /** Class of the node.

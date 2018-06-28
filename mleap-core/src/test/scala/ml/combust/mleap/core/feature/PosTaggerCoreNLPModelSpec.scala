@@ -14,11 +14,11 @@ class PosTaggerCoreNLPModelSpec extends FunSpec  {
 
     it("has the right output schema") {
       assert(model.outputSchema.fields ==
-        Seq(StructField("output", ListType.String)))
+        Seq(StructField("output", ScalarType.String)))
     }
   }
 
-  describe("get tags from spanish") {
+  describe("get words without filter from spanish") {
     val model = PosTaggerCoreNLPModel("es")
 
     val tokens = "Estoy en la tienda de harry potter en la sección de slytherin y se acerca  una chica española y empieza a decir 'yo creo que soy slytherin, yo soy mala'. Madre mía la gente se piensa que ser slytherin es ser malo. Además si no sabes que casa eres, probablemente no seas slytherin"
@@ -30,8 +30,32 @@ class PosTaggerCoreNLPModelSpec extends FunSpec  {
     }
   }
 
-  describe("get tags from english") {
+  describe("get words without filter from english") {
     val model = PosTaggerCoreNLPModel("en")
+
+    val tokens = "From Wayne to Kane: England excel after ditching Mr Big Stuff mentality"
+    val tags = model.apply(tokens)
+
+    System.out.println(tags)
+    it ("has returned a filled list") {
+      assert(tags.length > 0)
+    }
+  }
+
+  describe("get words with filter from spanish") {
+    val model = PosTaggerCoreNLPModel("es", "nouns,adjectives,verbs")
+
+    val tokens = "Estoy en la tienda de harry potter en la sección de slytherin y se acerca  una chica española y empieza a decir 'yo creo que soy slytherin, yo soy mala'. Madre mía la gente se piensa que ser slytherin es ser malo. Además si no sabes que casa eres, probablemente no seas slytherin"
+    val tags = model.apply(tokens)
+
+    System.out.println(tags)
+    it ("has returned a filled list") {
+      assert(tags.length > 0)
+    }
+  }
+
+  describe("get words  with filter from english") {
+    val model = PosTaggerCoreNLPModel("en", "nouns,adjectives,verbs")
 
     val tokens = "From Wayne to Kane: England excel after ditching Mr Big Stuff mentality"
     val tags = model.apply(tokens)

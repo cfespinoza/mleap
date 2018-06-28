@@ -37,7 +37,8 @@ class PosTaggerCoreNLPOp extends MleapOp[PosTaggerCoreNLPMleapTransformer, PosTa
       */
     override def store(model: Model, obj: PosTaggerCoreNLPModel)(implicit context: BundleContext[MleapContext]): Model = {
       val lang = obj.lang
-      model.withValue("language", Value.string(lang))
+      val selectedTags = obj.selectedTags
+      model.withValue("language", Value.string(lang)).withValue("selectedTags", Value.string(selectedTags))
     }
 
     /** Load the model.
@@ -51,7 +52,8 @@ class PosTaggerCoreNLPOp extends MleapOp[PosTaggerCoreNLPMleapTransformer, PosTa
       */
     override def load(model: Model)(implicit context: BundleContext[MleapContext]): PosTaggerCoreNLPModel = {
       val lang = model.value("language")
-      PosTaggerCoreNLPModel(lang.getString)
+      val selectedTags = model.value("selectedTags")
+      PosTaggerCoreNLPModel(lang.getString, selectedTags.getString)
     }
   }
 
