@@ -11,7 +11,7 @@ object Dependencies {
   val tensorflowVersion = "1.3.0"
   val akkaVersion = "2.4.16"
   val akkaHttpVersion = "10.0.3"
-  val corenlpVersion = "3.6.0"
+  val corenlpVersion = "3.9.1"
   val protobufVersion = "3.2.0"
 
   object Compile {

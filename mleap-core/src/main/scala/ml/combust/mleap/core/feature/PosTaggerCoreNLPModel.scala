@@ -37,11 +37,11 @@ case class PosTaggerCoreNLPModel(lang: String = "es", selectedTags: String = "")
 
   val (mapByLanguage, model) = getMapAndModelByLang(lang)
   val selectedTagList: Seq[String] = getSelectedTagList(mapByLanguage, selectedTags)
+  val tagger: MaxentTagger = new MaxentTagger(model)
 
   def apply(sentenceStr: String): String = {
     if (selectedTagList.length > 0){
       // there are selected tags
-      val tagger: MaxentTagger = new MaxentTagger(model)
       val taggedStr: String = tagger.tagString(sentenceStr)
       val taggedStrSeq: Seq[String] = taggedStr.split(" ").toSeq
       val filteredTaggedStrSeq: Seq[String] = taggedStrSeq.filter(tagged => selectedTagList.indexOf(tagged.split("_").last) > -1)
